@@ -18,5 +18,4 @@ public interface ContactRepository extends CrudRepository<Contact,Long>{
 	
 	@Query("select c from Contact c join c.user u where u.userid = :userid and c.contactId = :contactId")
 	Contact findByUseridandContactId(@Param("userid") Long userid , @Param("contactId") Long contactId );
-
 }

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -20,7 +22,7 @@ import com.contacts.repository.ContactRepository;
 import com.contacts.util.ContactWrapper;
 
 @Controller
-public class ViewAllContactsController {
+public class ViewContactsController {
 	
 	@Autowired
 	ContactRepository contactRepository;
@@ -68,4 +70,22 @@ public class ViewAllContactsController {
 		return "view_contact";
 	}
 
+	// show contact details by contact id
+	@RequestMapping("/get_contact_by_id")
+	public String getContactDetails(Model theModel,HttpServletRequest request)
+	{
+		String contactId=request.getParameter("contactId");
+		Contact c=contactRepository.findByUseridandContactId((Long)httpSession.getAttribute("uid"), Long.parseLong(contactId));
+		List<ContactPhone> phList=contactPhoneRepository.findByUseridandContactId((Long)httpSession.getAttribute("uid"), Long.parseLong(contactId));
+		ContactWrapper cw=new ContactWrapper();
+		cw.setContactId(c.getContactId());
+		cw.setEmailId(c.getEmailId());
+		cw.setName(c.getName());
+		for(ContactPhone ctemp : phList)
+		{
+			cw.getPhList().add(ctemp.getPhoneNo());
+		}
+		theModel.addAttribute("contact", cw);
+		return "edit_contact";
+	}
 }
