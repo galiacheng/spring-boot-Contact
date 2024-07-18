@@ -1,10 +1,6 @@
 package com.contacts.entity;
 
-import java.util.List;
-
-
 import javax.persistence.*;
-import javax.validation.Valid;
 
 import com.contacts.forms.AddContactForm;
 
